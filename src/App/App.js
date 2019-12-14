@@ -4,6 +4,7 @@ import firebaseConnection from '../helpers/data/connection';
 import Auth from '../components/Auth/Auth';
 import MyNavbar from '../components/MyNavbar/MyNavbar';
 import BoardsContainer from '../components/BoardsContainer/BoardsContainer';
+import SingleBoard from '../components/SingleBoard/SingleBoard';
 import './App.scss';
 
 firebaseConnection();
@@ -12,6 +13,7 @@ firebaseConnection();
 class App extends React.Component {
   state = {
     authed: false,
+    selectedBoardId: null,
   }
 
   componentDidMount() {
@@ -28,15 +30,22 @@ class App extends React.Component {
     this.removeListener();
   }
 
+  setSingleBoard = (selectedBoardId) => {
+    this.setState({ selectedBoardId });
+  }
+
   render() {
-    const { authed } = this.state;
+    const { authed, selectedBoardId } = this.state;
 
     return (
       <div className="App">
         <MyNavbar authed={authed} />
         <button className="btn btn-danger">Charity's Button</button>
         {
-        (authed) ? (<BoardsContainer />) : (<Auth />)
+        (authed) ? (<BoardsContainer setSingleBoard={this.setSingleBoard} />) : (<Auth />)
+      }
+      {
+      (selectedBoardId) && (<SingleBoard selectedBoardId={selectedBoardId} setSingleBoard={this.setSingleBoard} />)
       }
       </div>
       // If they are authenticated load the board
