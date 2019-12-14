@@ -2,6 +2,7 @@ import React from 'react';
 import firebase from 'firebase/app';
 import firebaseConnection from '../helpers/data/connection';
 import Auth from '../components/Auth/Auth';
+import MyNavbar from '../components/MyNavbar/MyNavbar';
 import './App.scss';
 
 firebaseConnection();
@@ -31,6 +32,7 @@ class App extends React.Component {
 
     return (
       <div className="App">
+        <MyNavbar authed={authed} />
         <button className="btn btn-danger">Charity's Button</button>
         {
         (authed) ? (<div>You Logged In!</div>) : (<Auth />)
