@@ -3,6 +3,7 @@ import firebase from 'firebase/app';
 import firebaseConnection from '../helpers/data/connection';
 import Auth from '../components/Auth/Auth';
 import MyNavbar from '../components/MyNavbar/MyNavbar';
+import BoardsContainer from '../components/BoardsContainer/BoardsContainer';
 import './App.scss';
 
 firebaseConnection();
@@ -35,7 +36,7 @@ class App extends React.Component {
         <MyNavbar authed={authed} />
         <button className="btn btn-danger">Charity's Button</button>
         {
-        (authed) ? (<div>You Logged In!</div>) : (<Auth />)
+        (authed) ? (<BoardsContainer />) : (<Auth />)
       }
       </div>
       // If they are authenticated load the board
