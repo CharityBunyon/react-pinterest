@@ -17,18 +17,31 @@ class SingleBoard extends React.Component {
     pins: [],
   }
 
+  getPinData = (selectedBoardId) => {
+    pinData.getPinsByBoardId(selectedBoardId)
+      .then((pins) => {
+        this.setState({ pins });
+      })
+      .catch((errorFromGetPins) => console.error({ errorFromGetPins }));
+  }
+
   componentDidMount() {
     const { selectedBoardId } = this.props;
     boardData.getSingleBoard(selectedBoardId)
       .then((request) => {
         this.setState({ board: request.data });
-        pinData.getPinsByBoardId(selectedBoardId)
-          .then((pins) => {
-            this.setState({ pins });
-          })
-          .catch((errorFromGetPins) => console.error({ errorFromGetPins }));
+        this.getPinData(selectedBoardId);
       })
       .catch((errorFromGetSingleBoard) => console.error({ errorFromGetSingleBoard }));
+  }
+
+  deleteSinglePin = (pinId) => {
+    const { selectedBoardId } = this.props;
+    pinData.deletePin(pinId)
+      .then(() => {
+        this.getPinData(selectedBoardId);
+      })
+      .catch((errorFromDeletePin) => console.error({ errorFromDeletePin }));
   }
 
   removeSelectedBoardId = (e) => {
@@ -46,7 +59,7 @@ class SingleBoard extends React.Component {
           <h2>{board.name}</h2>
           <p>{board.description}</p>
           <div className="d-flex flex-wrap">
-            { pins.map((pin) => <Pin pin={pin}/>)}
+            { pins.map((pin) => <Pin key={pin.id} pin={pin} deleteSinglePin={this.deleteSinglePin}/>)}
           </div>
         </div>
       </div>
